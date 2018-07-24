@@ -18,7 +18,7 @@ class LoginViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "More Art to People"
+        label.text = "MAP"
         label.font = UIFont.systemFont(ofSize: 30, weight: UIFont.Weight.heavy)
         return label
     }()
@@ -26,7 +26,7 @@ class LoginViewController: UIViewController {
     let usernameTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
-        tf.placeholder = "사용자 이메일"
+        tf.placeholder = "사용자 아이디"
         return tf
     }()
     
@@ -43,6 +43,7 @@ class LoginViewController: UIViewController {
         btn.setTitle("로그인", for: UIControlState.normal)
         btn.layer.cornerRadius = 8
         btn.setBackgroundColor(color: UIColor.FlatColor.Blue.Blue5, forState: UIControlState.highlighted, radius: 8)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
         return btn
     }()
     
@@ -55,58 +56,90 @@ class LoginViewController: UIViewController {
         btn.addTarget(self, action: #selector(moveToRegister), for: UIControlEvents.touchUpInside)
         return btn
     }()
+    
+    let findPasswordButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("비밀번호 찾기", for: UIControlState.normal)
+        return btn
+    }()
+    
+    let findIdButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("아이디 찾기", for: UIControlState.normal)
+        return btn
+    }()
+    
+    lazy var findStackView: UIStackView = {
+        let sv = UIStackView(arrangedSubviews: [findIdButton, findPasswordButton])
+        sv.axis = .horizontal
+        sv.distribution = .fillEqually
+        sv.spacing = 16
+        return sv
+    }()
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.view.endEditing(true)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setup()
+        self.title = "MAP"
         
-        rxKeyHeight().observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [weak self] (height) in
-                if height == 0 {
-                    
-                } else {
-                    guard let viewHeight = self?.view.frame.size.height else {
-                        return
-                    }
-                    UIView.animate(withDuration: 0.5, animations: {
-                        self?.titleLabelTopConstraint?.constant = viewHeight * 0.1
-                        self?.view.layoutIfNeeded()
-                    })
-                }
-            }).disposed(by: disposeBag)
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 1136:
+                print("iPhone 5 or 5S or 5C")
+                setupSmallest()
+            case 1334:
+                print("iPhone 6/6S/7/8")
+            case 1920, 2208:
+                print("iPhone 6+/6S+/7+/8+")
+            case 2436:
+                print("iPhone X")
+            default:
+                print("unknown")
+            }
+        }
+        
+//        setup()
+        
+//        rxKeyHeight().observeOn(MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] (height) in
+//                if height == 0 {
+//
+//                } else {
+//                    guard let viewHeight = self?.view.frame.size.height else {
+//                        return
+//                    }
+//                    UIView.animate(withDuration: 0.5, animations: {
+//                        self?.titleLabelTopConstraint?.constant = viewHeight * 0.1
+//                        self?.view.layoutIfNeeded()
+//                    })
+//                }
+//            }).disposed(by: disposeBag)
     }
 }
 
 extension LoginViewController {
-    func setup() {
-        let components = [titleLabel, usernameTextField, passwordTextField, loginButton, registerButton]
+    func setupSmallest() {
+        let components = [usernameTextField, passwordTextField, loginButton, findIdButton, findPasswordButton]
         components.forEach { (component) in
             component.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(component)
         }
         
-        titleLabelTopConstraint = NSLayoutConstraint(item: titleLabel, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: view.frame.size.height * 0.3)
-        titleLabelTopConstraint?.isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-
-        usernameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24).isActive = true
-        usernameTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 24).isActive = true
-        usernameTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -24).isActive = true
+        usernameTextField.anchor(top: topLayoutGuide.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 24, left: 16, bottom: 0, right: 16))
         
-        passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 24).isActive = true
-        passwordTextField.leftAnchor.constraint(equalTo: usernameTextField.leftAnchor, constant: 0).isActive = true
-        passwordTextField.rightAnchor.constraint(equalTo: usernameTextField.rightAnchor, constant: 0).isActive = true
+        passwordTextField.anchor(top: usernameTextField.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 8, left: 16, bottom: 0, right: 16))
         
-        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 24).isActive = true
-        loginButton.leftAnchor.constraint(equalTo: passwordTextField.leftAnchor).isActive = true
-        loginButton.rightAnchor.constraint(equalTo: passwordTextField.rightAnchor).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        loginButton.anchor(top: passwordTextField.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 24))
         
-        registerButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16).isActive = true
-        registerButton.leftAnchor.constraint(equalTo: passwordTextField.leftAnchor).isActive = true
-        registerButton.rightAnchor.constraint(equalTo: passwordTextField.rightAnchor).isActive = true
-        registerButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        findStackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(findStackView)
+        findStackView.anchor(top: loginButton.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 8, left: 16, bottom: 0, right: 16), size: .init(width: 0, height: 24))
 
     }
     

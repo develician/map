@@ -1,0 +1,111 @@
+@import 'utils';
+
+.Wrapper {
+    margin: 0 auto;
+    width: 100%;
+    height: calc(100vh - 15rem);
+    // background-image: url("https://images.unsplash.com/photo-1492037766660-2a56f9eb3fcb?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a27baa10230c6a501107c704b301c188&auto=format&fit=crop&w=1650&q=80");
+
+    
+    
+    @include media("<medium") {
+        width: 100%;
+    }
+
+    .Form {
+        padding: 1rem;
+        margin: 0 auto;
+        margin-top: 3rem;
+        
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid $oc-gray-4;
+        border-radius: 3px;
+        
+        width: 425px;
+        @include media("<medium") {
+            width: 100%;
+            margin-top: 0;
+            border: none;
+        }
+
+        display: flex;
+        flex-direction: column;
+
+        .Line {
+            .Label {
+                color: white;
+                font-size: 1.25rem;
+                font-weight: 700;
+            }
+
+            .Input {
+                flex: 1;
+                input {
+                    padding: 0.25rem;
+                    background: rgba(0, 0, 0, 0.5);
+                    color: white;
+                    width: 100%;
+                    border: 1px solid $oc-gray-4;
+                    outline: none;
+                    height: 2rem;
+                    font-size: 1.5rem;
+                }
+            }
+
+            .Label + .Input {
+                margin-top: 0.75rem;
+            }
+        }
+
+        .Line + .Line {
+            margin-top: 1rem;
+        }
+
+        .Button {
+            margin-top: 1rem;
+            color: white;
+            cursor: pointer;
+            user-select: none; // 드래그 방지
+            display: inline-flex;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            border-radius: 2px;
+            
+            &:hover {
+                background: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        .RecogLine {
+            height: 1px;
+            background: $oc-gray-5;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .Description {
+            display: flex;
+            margin: 0 auto;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: white;
+            user-select: none;
+            cursor: pointer;
+            &:hover {
+                color: $oc-blue-5;
+            }
+            &:active {
+                color: $oc-blue-6;
+            }
+        }
+
+     
+    }
+}

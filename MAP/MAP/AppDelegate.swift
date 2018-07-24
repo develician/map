@@ -18,8 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         window?.makeKeyAndVisible()
+        let rootNaviController = UINavigationController(rootViewController: RegisterViewController())
         
-        window?.rootViewController = AuthNavController()
+        window?.rootViewController = rootNaviController
         return true
     }
 

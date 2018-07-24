@@ -16,7 +16,7 @@ class AuthNavController: UINavigationController {
         view.backgroundColor = .white
     
         
-        let views = [LoginViewController()]
+        let views = [RegisterViewController()]
         
         viewControllers = views
         
